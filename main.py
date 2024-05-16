@@ -4,6 +4,8 @@ from flask import request
 from flask_cors import CORS
 import json
 from waitress import serve
+from Controladores.ControladorCliente import ControladorCliente
+
 
 app=Flask(__name__)
 """
@@ -16,25 +18,43 @@ Implementacion de los controladores--------------------------------
 """
 
 
-
-
-
-
+miControladorCliente=ControladorCliente()
 
 """
 implementacion de los metodos
-"""
-"""
-----------------------------------------------SERVICIOS CLIENTES___________________________________________________________________________
-"""
-
-
-
-
-
-
 
 """
+
+
+
+
+@app.route("/clientes",methods=['GET'])
+def getClientes():
+    json=miControladorCliente.index()
+    return jsonify(json)
+@app.route("/clientes",methods=['POST'])
+def crearCliente():
+    data = request.get_json()
+    json=miControladorCliente.create(data)
+    return jsonify(json)
+@app.route("/clientes/<string:id>",methods=['GET'])
+def getCliente(id):
+    json=miControladorCliente.show(id)
+    return jsonify(json)
+@app.route("/clientes/<string:id>",methods=['PUT'])
+def modificarCliente(id):
+    data = request.get_json()
+    json=miControladorCliente.update(id,data)
+    return jsonify(json)
+@app.route("/clientes/<string:id>",methods=['DELETE'])
+def eliminarCliente(id):
+    json=miControladorCliente.delete(id)
+    return jsonify(json)
+
+
+
+"""
+
 ----------------------------------------------SERVICIOS PRODUCTOS___________________________________________________________________________
 """
 
