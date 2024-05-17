@@ -6,6 +6,7 @@ import json
 from waitress import serve
 from Controladores.ControladorCliente import ControladorCliente
 from Controladores.ControladorProveedor import ControladorProveedor
+from Controladores.ControladorProducto import ControladorProducto
 
 
 app=Flask(__name__)
@@ -21,14 +22,17 @@ Implementacion de los controladores--------------------------------
 
 miControladorCliente=ControladorCliente()
 miControladorProveedor=ControladorProveedor()
+miControladorProducto=ControladorProducto()
 
 """
 implementacion de los metodos
 
 """
 
+"""
 
-
+----------------------------------------------SERVICIOS CLIENTES___________________________________________________________________________
+"""
 
 @app.route("/clientes",methods=['GET'])
 def getClientes():
@@ -60,9 +64,37 @@ def eliminarCliente(id):
 ----------------------------------------------SERVICIOS PRODUCTOS___________________________________________________________________________
 """
 
+@app.route("/productos",methods=['GET'])
+def getProductos():
+    json=miControladorProducto.index()
+    return jsonify(json)
+@app.route("/productos",methods=['POST'])
+def crearProducto():
+    data = request.get_json()
+    json=miControladorProducto.create(data)
+    return jsonify(json)
+@app.route("/productos/<string:id>",methods=['GET'])
+def getProducto(id):
+    json=miControladorProducto.show(id)
+    return jsonify(json)
+@app.route("/productos/<string:id>",methods=['PUT'])
+def modificarProducto(id):
+    data = request.get_json()
+    json=miControladorProducto.update(id,data)
+    return jsonify(json)
+@app.route("/productos/<string:id>",methods=['DELETE'])
+def eliminarProducto(id):
+    json=miControladorProducto.delete(id)
+    return jsonify(json)
 
+"""
+metodo de relacion provvedor - producto 
+"""
 
-
+@app.route("/productos/<string:id>/proveedor/<string:id_proveedor>", methods=['PUT'])
+def asignarProveedorAProducto(id, id_proveedor):
+    json = miControladorProducto.asignarProveedor(id, id_proveedor)
+    return jsonify(json)
 
 
 
