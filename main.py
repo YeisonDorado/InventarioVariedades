@@ -5,6 +5,7 @@ from flask_cors import CORS
 import json
 from waitress import serve
 from Controladores.ControladorCliente import ControladorCliente
+from Controladores.ControladorProveedor import ControladorProveedor
 
 
 app=Flask(__name__)
@@ -19,6 +20,7 @@ Implementacion de los controladores--------------------------------
 
 
 miControladorCliente=ControladorCliente()
+miControladorProveedor=ControladorProveedor()
 
 """
 implementacion de los metodos
@@ -68,7 +70,28 @@ def eliminarCliente(id):
 ----------------------------------------------SERVICIOS PROVEEDORES___________________________________________________________________________
 """
 
-
+@app.route("/proveedores",methods=['GET'])
+def getProveedores():
+    json=miControladorProveedor.index()
+    return jsonify(json)
+@app.route("/proveedores",methods=['POST'])
+def crearProveedor():
+    data = request.get_json()
+    json=miControladorProveedor.create(data)
+    return jsonify(json)
+@app.route("/proveedores/<string:id>",methods=['GET'])
+def getProveedor(id):
+    json=miControladorProveedor.show(id)
+    return jsonify(json)
+@app.route("/proveedores/<string:id>",methods=['PUT'])
+def modificarProveedor(id):
+    data = request.get_json()
+    json=miControladorProveedor.update(id,data)
+    return jsonify(json)
+@app.route("/proveedores/<string:id>",methods=['DELETE'])
+def eliminarProveedor(id):
+    json=miControladorProveedor.delete(id)
+    return jsonify(json)
 
 
 
