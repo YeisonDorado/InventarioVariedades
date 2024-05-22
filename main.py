@@ -7,6 +7,7 @@ from waitress import serve
 from Controladores.ControladorCliente import ControladorCliente
 from Controladores.ControladorProveedor import ControladorProveedor
 from Controladores.ControladorProducto import ControladorProducto
+from Controladores.ControladorComprobanteVenta import ControladorComprobanteVenta
 
 
 app=Flask(__name__)
@@ -23,6 +24,7 @@ Implementacion de los controladores--------------------------------
 miControladorCliente=ControladorCliente()
 miControladorProveedor=ControladorProveedor()
 miControladorProducto=ControladorProducto()
+miControladorComprobanteVenta=ControladorComprobanteVenta()
 
 """
 implementacion de los metodos
@@ -133,6 +135,36 @@ def eliminarProveedor(id):
 ----------------------------------------------SERVICIOS COMPROBANTE-VENTA___________________________________________________________________________
 """
 
+@app.route("/comprobantes", methods=['GET'])
+def getComprobantes():
+    json = miControladorComprobanteVenta.index()
+    return jsonify(json)
+
+
+@app.route("/comprobantes/<string:id>", methods=['GET'])
+def getComprobante(id):
+    json = miControladorComprobanteVenta.show(id)
+    return jsonify(json)
+
+
+@app.route("/comprobantes/producto/<string:id_producto>/cliente/<string:id_cliente>", methods=['POST'])
+def crearComprobante(id_producto, id_cliente):
+    data = request.get_json()
+    json = miControladorComprobanteVenta.create(data, id_producto, id_cliente)
+    return jsonify(json)
+
+
+@app.route("/comprobantes/<string:id_comprobante>/producto/<string:id_producto>/cliente/<string:id_cliente>", methods=['PUT'])
+def modificarComprobante(id_comprobante, id_producto, id_cliente):
+    data = request.get_json()
+    json = miControladorComprobanteVenta.update(id_comprobante, data, id_producto, id_cliente)
+    return jsonify(json)
+
+
+@app.route("/comprobantes/<string:id_comprobante>", methods=['DELETE'])
+def eliminarComprobante(id_comprobante):
+    json = miControladorComprobanteVenta.delete(id_comprobante)
+    return jsonify(json)
 
 
 
